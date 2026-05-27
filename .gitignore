@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+jspm_packages/
+web_modules/
+
+# Production builds
+dist/
+build/
+out/
+.next/
+
+# Local configuration and credentials
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.local
+
+# Editor directories and files
+.vscode/
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# AI agent logs and internal brain
+brain/
+knowledge/
+.gemini/
+.system_generated/
+test-api.js
