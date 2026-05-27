@@ -22,6 +22,7 @@ const ProductForm = () => {
   const [formError, setFormError] = useState(null);
   const [fetchingProduct, setFetchingProduct] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Handle direct file upload to backend
   const handleImageUpload = async (e) => {
@@ -100,6 +101,8 @@ const ProductForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
+
     setFormError(null);
 
     // Basic Validation
@@ -129,17 +132,24 @@ const ProductForm = () => {
       image_url: imageUrl,
     };
 
-    let result;
-    if (isEditMode) {
-      result = await updateProduct(id, productPayload);
-    } else {
-      result = await createProduct(productPayload);
-    }
+    setIsSubmitting(true);
+    try {
+      let result;
+      if (isEditMode) {
+        result = await updateProduct(id, productPayload);
+      } else {
+        result = await createProduct(productPayload);
+      }
 
-    if (result.success) {
-      navigate('/products');
-    } else {
-      setFormError(result.error || 'Operation failed. Please try again.');
+      if (result.success) {
+        navigate('/products');
+      } else {
+        setFormError(result.error || 'Operation failed. Please try again.');
+        setIsSubmitting(false);
+      }
+    } catch (err) {
+      setFormError(err.message || 'Operation failed. Please try again.');
+      setIsSubmitting(false);
     }
   };
 
@@ -433,9 +443,9 @@ const ProductForm = () => {
               type="submit"
               className="btn btn-primary"
               style={{ padding: '12px 40px' }}
-              disabled={loading || uploadingImage}
+              disabled={loading || uploadingImage || isSubmitting}
             >
-              {loading ? 'SAVING DATA...' : uploadingImage ? 'UPLOADING IMAGE...' : isEditMode ? 'UPDATE PRODUCT' : 'CREATE PRODUCT'}
+              {isSubmitting || loading ? 'SAVING DATA...' : uploadingImage ? 'UPLOADING IMAGE...' : isEditMode ? 'UPDATE PRODUCT' : 'CREATE PRODUCT'}
             </button>
           </div>
 

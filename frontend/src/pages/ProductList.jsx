@@ -46,7 +46,9 @@ const ProductList = () => {
 
   // Helper to fallback to elegant product illustrations if no URL is provided
   const getProductImage = (url) => {
-    return url || 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&q=80';
+    if (url && url.trim() !== '') return url;
+    // SVG placeholder for products with no image
+    return `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300"><rect fill="#1a1a2e" width="400" height="300"/><text x="200" y="140" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#555">📦</text><text x="200" y="175" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#555">No Image Available</text></svg>`)}`;
   };
 
   return (
